@@ -36,6 +36,9 @@ function stripBundledModels(enabled: boolean): Plugin {
 export default defineConfig(({ mode }) => {
   const allowRemoteModels = loadEnv(mode, process.cwd(), '').VITE_REMOTE_VISION_MODELS === 'true';
   return {
+    // GitHub Pages serves project sites below /<repository>/ instead of from the domain root.
+    // Keep the root path for local development and the existing standalone deployment.
+    base: process.env.GITHUB_ACTIONS === 'true' ? '/LOST_QUEST_/' : '/',
     plugins: [react(), tailwindcss(), localOnnxRuntime(), stripBundledModels(allowRemoteModels)],
     define: {
       __ALLOW_REMOTE_MODELS__: JSON.stringify(allowRemoteModels),
